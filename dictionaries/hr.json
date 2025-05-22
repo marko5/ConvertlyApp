@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Convertly",
+    "slogan": "Mjeri sve, bilo gdje"
+  },
+  "common": {
+    "loading": "Učitavanje...",
+    "error": "Došlo je do pogreške",
+    "copy": "Kopiraj",
+    "copied": "Kopirano!",
+    "swap": "Zamijeni jedinice",
+    "from": "Od",
+    "to": "Do",
+    "search": "Pretraži",
+    "noResults": "Nema rezultata",
+    "updated": "Ažurirano",
+    "bookmark": "Pritisnite Ctrl+D za dodavanje u favorite",
+    "homeScreen": "Dodajte na početni zaslon za brzi pristup",
+    "copyright": "© 2025 Convertly. Sva prava pridržana."
+  },
+  "tabs": {
+    "converter": "Pretvarač",
+    "currencyRates": "Tečajevi Valuta"
+  },
+  "categories": {
+    "title": "Kategorije",
+    "length": "Duljina",
+    "weight": "Težina",
+    "temperature": "Temperatura",
+    "volume": "Volumen",
+    "time": "Vrijeme",
+    "currency": "Valuta"
+  },
+  "converter": {
+    "title": "Pretvori",
+    "shortcuts": "Prečaci na tipkovnici: Ctrl+S za zamjenu, Ctrl+C za kopiranje"
+  },
+  "currency": {
+    "title": "Tečajevi Valuta",
+    "base": "Osnovna:",
+    "trending": "Trendovi",
+    "searchPlaceholder": "Pretraži valutu..."
+  },
+  "regions": {
+    "major": "Glavne",
+    "americas": "Amerika",
+    "europe": "Europa",
+    "asia": "Azija",
+    "oceania": "Oceanija",
+    "africa": "Afrika",
+    "middleEast": "Bliski Istok"
+  },
+  "units": {
+    "length": {
+      "m": "Metri",
+      "cm": "Centimetri",
+      "km": "Kilometri",
+      "in": "Inči",
+      "ft": "Stope",
+      "yd": "Jardi",
+      "mi": "Milje"
+    },
+    "weight": {
+      "kg": "Kilogrami",
+      "g": "Grami",
+      "mg": "Miligrami",
+      "lb": "Funte",
+      "oz": "Unce",
+      "st": "Stone"
+    },
+    "temperature": {
+      "c": "Celzijus",
+      "f": "Fahrenheit",
+      "k": "Kelvin"
+    },
+    "volume": {
+      "l": "Litri",
+      "ml": "Mililitri",
+      "gal": "Galoni",
+      "qt": "Kvarte",
+      "pt": "Pinte",
+      "cup": "Šalice",
+      "oz": "Tekuće Unce"
+    },
+    "time": {
+      "s": "Sekunde",
+      "min": "Minute",
+      "h": "Sati",
+      "d": "Dani",
+      "wk": "Tjedni",
+      "mo": "Mjeseci",
+      "yr": "Godine"
+    }
+  }
+}

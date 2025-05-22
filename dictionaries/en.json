@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Convertly",
+    "slogan": "Measure everything, anywhere"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "swap": "Swap units",
+    "from": "From",
+    "to": "To",
+    "search": "Search",
+    "noResults": "No results found",
+    "updated": "Updated",
+    "bookmark": "Press Ctrl+D to bookmark this app for quick access",
+    "homeScreen": "Add to home screen for quick access",
+    "copyright": "© 2025 Convertly. All rights reserved."
+  },
+  "tabs": {
+    "converter": "Converter",
+    "currencyRates": "Currency Rates"
+  },
+  "categories": {
+    "title": "Categories",
+    "length": "Length",
+    "weight": "Weight",
+    "temperature": "Temperature",
+    "volume": "Volume",
+    "time": "Time",
+    "currency": "Currency"
+  },
+  "converter": {
+    "title": "Convert",
+    "shortcuts": "Keyboard shortcuts: Ctrl+S to swap units, Ctrl+C to copy result"
+  },
+  "currency": {
+    "title": "Currency Exchange Rates",
+    "base": "Base:",
+    "trending": "Trending",
+    "searchPlaceholder": "Search currency..."
+  },
+  "regions": {
+    "major": "Major",
+    "americas": "Americas",
+    "europe": "Europe",
+    "asia": "Asia",
+    "oceania": "Oceania",
+    "africa": "Africa",
+    "middleEast": "Middle East"
+  },
+  "units": {
+    "length": {
+      "m": "Meters",
+      "cm": "Centimeters",
+      "km": "Kilometers",
+      "in": "Inches",
+      "ft": "Feet",
+      "yd": "Yards",
+      "mi": "Miles"
+    },
+    "weight": {
+      "kg": "Kilograms",
+      "g": "Grams",
+      "mg": "Milligrams",
+      "lb": "Pounds",
+      "oz": "Ounces",
+      "st": "Stone"
+    },
+    "temperature": {
+      "c": "Celsius",
+      "f": "Fahrenheit",
+      "k": "Kelvin"
+    },
+    "volume": {
+      "l": "Liters",
+      "ml": "Milliliters",
+      "gal": "Gallons",
+      "qt": "Quarts",
+      "pt": "Pints",
+      "cup": "Cups",
+      "oz": "Fluid Ounces"
+    },
+    "time": {
+      "s": "Seconds",
+      "min": "Minutes",
+      "h": "Hours",
+      "d": "Days",
+      "wk": "Weeks",
+      "mo": "Months",
+      "yr": "Years"
+    }
+  }
+}

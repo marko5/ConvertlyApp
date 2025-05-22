@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Convertly",
+    "slogan": "Mide todo, en cualquier lugar"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Se produjo un error",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "swap": "Intercambiar unidades",
+    "from": "De",
+    "to": "A",
+    "search": "Buscar",
+    "noResults": "No se encontraron resultados",
+    "updated": "Actualizado",
+    "bookmark": "Presiona Ctrl+D para marcar esta aplicación",
+    "homeScreen": "Añadir a la pantalla de inicio para acceso rápido",
+    "copyright": "© 2025 Convertly. Todos los derechos reservados."
+  },
+  "tabs": {
+    "converter": "Conversor",
+    "currencyRates": "Tasas de Cambio"
+  },
+  "categories": {
+    "title": "Categorías",
+    "length": "Longitud",
+    "weight": "Peso",
+    "temperature": "Temperatura",
+    "volume": "Volumen",
+    "time": "Tiempo",
+    "currency": "Moneda"
+  },
+  "converter": {
+    "title": "Convertir",
+    "shortcuts": "Atajos de teclado: Ctrl+S para intercambiar, Ctrl+C para copiar"
+  },
+  "currency": {
+    "title": "Tasas de Cambio de Divisas",
+    "base": "Base:",
+    "trending": "Tendencia",
+    "searchPlaceholder": "Buscar moneda..."
+  },
+  "regions": {
+    "major": "Principales",
+    "americas": "Américas",
+    "europe": "Europa",
+    "asia": "Asia",
+    "oceania": "Oceanía",
+    "africa": "África",
+    "middleEast": "Medio Oriente"
+  },
+  "units": {
+    "length": {
+      "m": "Metros",
+      "cm": "Centímetros",
+      "km": "Kilómetros",
+      "in": "Pulgadas",
+      "ft": "Pies",
+      "yd": "Yardas",
+      "mi": "Millas"
+    },
+    "weight": {
+      "kg": "Kilogramos",
+      "g": "Gramos",
+      "mg": "Miligramos",
+      "lb": "Libras",
+      "oz": "Onzas",
+      "st": "Stone"
+    },
+    "temperature": {
+      "c": "Celsius",
+      "f": "Fahrenheit",
+      "k": "Kelvin"
+    },
+    "volume": {
+      "l": "Litros",
+      "ml": "Mililitros",
+      "gal": "Galones",
+      "qt": "Cuartos",
+      "pt": "Pintas",
+      "cup": "Tazas",
+      "oz": "Onzas Líquidas"
+    },
+    "time": {
+      "s": "Segundos",
+      "min": "Minutos",
+      "h": "Horas",
+      "d": "Días",
+      "wk": "Semanas",
+      "mo": "Meses",
+      "yr": "Años"
+    }
+  }
+}

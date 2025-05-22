@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Convertly",
+    "slogan": "Mesurez tout, partout"
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "copy": "Copier",
+    "copied": "Copié !",
+    "swap": "Échanger les unités",
+    "from": "De",
+    "to": "À",
+    "search": "Rechercher",
+    "noResults": "Aucun résultat trouvé",
+    "updated": "Mis à jour",
+    "bookmark": "Appuyez sur Ctrl+D pour ajouter aux favoris",
+    "homeScreen": "Ajouter à l'écran d'accueil pour un accès rapide",
+    "copyright": "© 2025 Convertly. Tous droits réservés."
+  },
+  "tabs": {
+    "converter": "Convertisseur",
+    "currencyRates": "Taux de Change"
+  },
+  "categories": {
+    "title": "Catégories",
+    "length": "Longueur",
+    "weight": "Poids",
+    "temperature": "Température",
+    "volume": "Volume",
+    "time": "Temps",
+    "currency": "Devise"
+  },
+  "converter": {
+    "title": "Convertir",
+    "shortcuts": "Raccourcis clavier : Ctrl+S pour échanger, Ctrl+C pour copier"
+  },
+  "currency": {
+    "title": "Taux de Change des Devises",
+    "base": "Base :",
+    "trending": "Tendance",
+    "searchPlaceholder": "Rechercher une devise..."
+  },
+  "regions": {
+    "major": "Principales",
+    "americas": "Amériques",
+    "europe": "Europe",
+    "asia": "Asie",
+    "oceania": "Océanie",
+    "africa": "Afrique",
+    "middleEast": "Moyen-Orient"
+  },
+  "units": {
+    "length": {
+      "m": "Mètres",
+      "cm": "Centimètres",
+      "km": "Kilomètres",
+      "in": "Pouces",
+      "ft": "Pieds",
+      "yd": "Yards",
+      "mi": "Miles"
+    },
+    "weight": {
+      "kg": "Kilogrammes",
+      "g": "Grammes",
+      "mg": "Milligrammes",
+      "lb": "Livres",
+      "oz": "Onces",
+      "st": "Stone"
+    },
+    "temperature": {
+      "c": "Celsius",
+      "f": "Fahrenheit",
+      "k": "Kelvin"
+    },
+    "volume": {
+      "l": "Litres",
+      "ml": "Millilitres",
+      "gal": "Gallons",
+      "qt": "Quarts",
+      "pt": "Pintes",
+      "cup": "Tasses",
+      "oz": "Onces Liquides"
+    },
+    "time": {
+      "s": "Secondes",
+      "min": "Minutes",
+      "h": "Heures",
+      "d": "Jours",
+      "wk": "Semaines",
+      "mo": "Mois",
+      "yr": "Années"
+    }
+  }
+}

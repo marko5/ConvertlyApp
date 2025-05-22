@@ -1,0 +1,95 @@
+{
+  "app": {
+    "name": "Convertly",
+    "slogan": "Misura tutto, ovunque"
+  },
+  "common": {
+    "loading": "Caricamento...",
+    "error": "Si è verificato un errore",
+    "copy": "Copia",
+    "copied": "Copiato!",
+    "swap": "Scambia unità",
+    "from": "Da",
+    "to": "A",
+    "search": "Cerca",
+    "noResults": "Nessun risultato trovato",
+    "updated": "Aggiornato",
+    "bookmark": "Premi Ctrl+D per aggiungere ai preferiti",
+    "homeScreen": "Aggiungi alla schermata iniziale per un accesso rapido",
+    "copyright": "© 2025 Convertly. Tutti i diritti riservati."
+  },
+  "tabs": {
+    "converter": "Convertitore",
+    "currencyRates": "Tassi di Cambio"
+  },
+  "categories": {
+    "title": "Categorie",
+    "length": "Lunghezza",
+    "weight": "Peso",
+    "temperature": "Temperatura",
+    "volume": "Volume",
+    "time": "Tempo",
+    "currency": "Valuta"
+  },
+  "converter": {
+    "title": "Converti",
+    "shortcuts": "Scorciatoie da tastiera: Ctrl+S per scambiare, Ctrl+C per copiare"
+  },
+  "currency": {
+    "title": "Tassi di Cambio Valute",
+    "base": "Base:",
+    "trending": "Tendenza",
+    "searchPlaceholder": "Cerca valuta..."
+  },
+  "regions": {
+    "major": "Principali",
+    "americas": "Americhe",
+    "europe": "Europa",
+    "asia": "Asia",
+    "oceania": "Oceania",
+    "africa": "Africa",
+    "middleEast": "Medio Oriente"
+  },
+  "units": {
+    "length": {
+      "m": "Metri",
+      "cm": "Centimetri",
+      "km": "Chilometri",
+      "in": "Pollici",
+      "ft": "Piedi",
+      "yd": "Iarde",
+      "mi": "Miglia"
+    },
+    "weight": {
+      "kg": "Chilogrammi",
+      "g": "Grammi",
+      "mg": "Milligrammi",
+      "lb": "Libbre",
+      "oz": "Once",
+      "st": "Stone"
+    },
+    "temperature": {
+      "c": "Celsius",
+      "f": "Fahrenheit",
+      "k": "Kelvin"
+    },
+    "volume": {
+      "l": "Litri",
+      "ml": "Millilitri",
+      "gal": "Galloni",
+      "qt": "Quarti",
+      "pt": "Pinte",
+      "cup": "Tazze",
+      "oz": "Once Liquide"
+    },
+    "time": {
+      "s": "Secondi",
+      "min": "Minuti",
+      "h": "Ore",
+      "d": "Giorni",
+      "wk": "Settimane",
+      "mo": "Mesi",
+      "yr": "Anni"
+    }
+  }
+}
