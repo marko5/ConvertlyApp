@@ -7,11 +7,7 @@ const config: CapacitorConfig = {
   webDir: "out",
   bundledWebRuntime: false,
   plugins: {
-    // Add AdMob configuration with your app ID
-    AdMob: {
-      appId: "ca-app-pub-5141185566064464~3497144840",
-    },
-    // Add Universal Links & App Links configuration
+    // Remove AdMob configuration
     CapacitorHttp: {
       enabled: true,
     },

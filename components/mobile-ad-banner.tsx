@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useAdMob } from "@/hooks/use-admob"
 
 interface MobileAdBannerProps {
   position?: "top" | "bottom"
@@ -10,23 +9,11 @@ interface MobileAdBannerProps {
 
 export default function MobileAdBanner({ position = "bottom", adUnitId }: MobileAdBannerProps) {
   const [isCapacitor, setIsCapacitor] = useState(false)
-  const { showBannerAd, isAdMobInitialized } = useAdMob()
 
-  // Check if we're in a Capacitor environment
+  // Web-only version - doesn't do anything
   useEffect(() => {
-    setIsCapacitor(typeof window !== "undefined" && window.Capacitor !== undefined)
+    setIsCapacitor(false)
   }, [])
-
-  // Show banner ad when AdMob is initialized
-  useEffect(() => {
-    if (isCapacitor && isAdMobInitialized) {
-      showBannerAd({
-        adId: adUnitId,
-        position: position === "top" ? "TOP_CENTER" : "BOTTOM_CENTER",
-        bannerSize: "ADAPTIVE_BANNER",
-      })
-    }
-  }, [isCapacitor, isAdMobInitialized, adUnitId, position, showBannerAd])
 
   // If not in Capacitor environment, render nothing
   if (!isCapacitor) {
