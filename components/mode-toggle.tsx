@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
 
 export function ModeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
@@ -16,7 +17,14 @@ export function ModeToggle() {
 
   // Simple toggle function
   const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+    const newTheme = resolvedTheme === "dark" ? "light" : "dark"
+    setTheme(newTheme)
+
+    // Track theme change
+    trackEvent(AnalyticsEvents.THEME_CHANGED, {
+      from: resolvedTheme,
+      to: newTheme,
+    })
   }
 
   if (!mounted) {

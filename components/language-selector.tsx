@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { locales } from "@/lib/i18n-config"
 import { Button } from "@/components/ui/button"
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
 
 interface LanguageSelectorProps {
   currentLocale: string
@@ -12,6 +13,12 @@ export default function LanguageSelector({ currentLocale }: LanguageSelectorProp
   const [isOpen, setIsOpen] = useState(false)
 
   const switchLanguage = (locale: string) => {
+    // Track language change
+    trackEvent(AnalyticsEvents.LANGUAGE_CHANGED, {
+      from: currentLocale,
+      to: locale,
+    })
+
     // Direct navigation to the root path with the new locale
     window.location.href = `/${locale}`
   }

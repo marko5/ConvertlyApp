@@ -13,6 +13,7 @@ import LanguageDebug from "@/components/language-debug"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Info } from "lucide-react"
 import type { Locale } from "@/lib/i18n-config"
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
 
 export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) {
   const [selectedCategory, setSelectedCategory] = useState("length")
@@ -28,6 +29,24 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
 
     return () => clearTimeout(timer)
   }, [])
+
+  // Track when the user changes tabs
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+    trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
+      category: "tab",
+      label: value,
+    })
+  }
+
+  // Track when the user changes categories
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(category)
+    trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
+      category: "conversion_category",
+      label: category,
+    })
+  }
 
   if (showSplash) {
     return <SplashScreen slogan={dict.app.slogan} />
@@ -52,7 +71,7 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
           </div>
         </header>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           <TabsList className="grid w-full grid-cols-2 mb-6">
             <TabsTrigger
               value="converter"
@@ -70,7 +89,7 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
 
           <TabsContent value="converter" className="space-y-6">
             <div className={isDesktop ? "grid grid-cols-[300px_1fr] gap-6" : "space-y-6"}>
-              <CategoryGrid selectedCategory={selectedCategory} onSelectCategory={setSelectedCategory} dict={dict} />
+              <CategoryGrid selectedCategory={selectedCategory} onSelectCategory={handleCategorySelect} dict={dict} />
               <ConversionPanel category={selectedCategory} dict={dict} />
             </div>
           </TabsContent>

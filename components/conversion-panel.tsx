@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { useMediaQuery } from "@/hooks/use-media-query"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
 
 // Conversion units for different categories
 const conversionUnits = {
@@ -222,6 +223,13 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
     setFromUnit(toUnit)
     setToUnit(fromUnit)
     setFromValue(toValue)
+
+    // Track swap action
+    trackEvent("units_swapped", {
+      category: category,
+      from: fromUnit,
+      to: toUnit,
+    })
   }
 
   // Copy result to clipboard
@@ -245,6 +253,15 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
 
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+
+    // Track copy action
+    trackEvent(AnalyticsEvents.COPY_RESULT, {
+      category: category,
+      from_unit: fromUnit,
+      to_unit: toUnit,
+      from_value: fromValue,
+      to_value: toValue,
+    })
   }
 
   // Get current units for the selected category

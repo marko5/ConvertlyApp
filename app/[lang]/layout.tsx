@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/theme-provider"
 import Script from "next/script"
 import { locales, type Locale } from "@/lib/i18n-config"
 import { getDictionary } from "@/lib/get-dictionary"
+import { AnalyticsProvider } from "@/components/analytics-provider"
+import { Suspense } from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -47,8 +49,9 @@ export default function RootLayout({
     <html lang={params.lang} suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
+          <Suspense>{children}</Suspense>
         </ThemeProvider>
+        <AnalyticsProvider />
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
