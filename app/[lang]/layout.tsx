@@ -8,6 +8,7 @@ import { locales, type Locale } from "@/lib/i18n-config"
 import { getDictionary } from "@/lib/get-dictionary"
 import { AnalyticsProvider } from "@/components/analytics-provider"
 import { Suspense } from "react"
+import { PageViewTracker } from "@/components/page-view-tracker"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -49,9 +50,17 @@ export default function RootLayout({
     <html lang={params.lang} suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <Suspense>{children}</Suspense>
+          {children}
         </ThemeProvider>
+
+        {/* Analytics - moved to the end */}
         <AnalyticsProvider />
+
+        <Suspense fallback={null}>
+          <PageViewTracker />
+        </Suspense>
+
+        {/* Service Worker Registration */}
         <Script id="register-sw" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {

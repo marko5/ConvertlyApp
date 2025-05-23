@@ -8,12 +8,22 @@ type EventOptions = {
 }
 
 export const trackEvent = (eventName: string, options: EventOptions = {}) => {
-  // Check if window and Vercel Analytics are available
-  if (typeof window !== "undefined" && window.va) {
-    window.va("event", {
-      name: eventName,
-      ...options,
-    })
+  try {
+    // Check if we're in the browser and analytics is available
+    if (typeof window === "undefined") return
+
+    // Use a timeout to ensure the analytics script has loaded
+    setTimeout(() => {
+      if (window.va && typeof window.va === "function") {
+        window.va("event", {
+          name: eventName,
+          ...options,
+        })
+      }
+    }, 100)
+  } catch (error) {
+    // Silently handle errors to prevent breaking the app
+    console.error("Analytics error:", error)
   }
 }
 

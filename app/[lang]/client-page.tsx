@@ -33,19 +33,31 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
   // Track when the user changes tabs
   const handleTabChange = (value: string) => {
     setActiveTab(value)
-    trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
-      category: "tab",
-      label: value,
-    })
+
+    // Safe analytics tracking
+    try {
+      trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
+        category: "tab",
+        label: value,
+      })
+    } catch (error) {
+      console.error("Analytics tracking error:", error)
+    }
   }
 
   // Track when the user changes categories
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(category)
-    trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
-      category: "conversion_category",
-      label: category,
-    })
+
+    // Safe analytics tracking
+    try {
+      trackEvent(AnalyticsEvents.CATEGORY_SELECTED, {
+        category: "conversion_category",
+        label: category,
+      })
+    } catch (error) {
+      console.error("Analytics tracking error:", error)
+    }
   }
 
   if (showSplash) {
