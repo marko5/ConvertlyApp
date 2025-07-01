@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "../globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Script from "next/script"
-import { locales, type Locale } from "@/lib/i18n-config"
+import { locales, defaultLocale } from "@/lib/i18n-config"
 import { getDictionary } from "@/lib/get-dictionary"
 import { AnalyticsProvider } from "@/components/analytics-provider"
 import { Suspense } from "react"
@@ -12,15 +12,28 @@ import { PageViewTracker } from "@/components/page-view-tracker"
 
 const inter = Inter({ subsets: ["latin"] })
 
-export async function generateMetadata({ params }: { params: { lang: Locale } }): Promise<Metadata> {
-  const dict = await getDictionary(params.lang)
+export async function generateMetadata({ params }: { params: { lang: string } }): Promise<Metadata> {
+  // Handle invalid locale
+  const isValidLocale = locales.some((locale) => locale.code === params.lang)
+  const lang = isValidLocale ? params.lang : defaultLocale
 
-  return {
-    title: dict.app.name,
-    description: dict.app.slogan,
-    applicationName: dict.app.name,
-    authors: [{ name: "Convertly Team" }],
-    keywords: ["converter", "measurement", "units", "calculator", "currency", "exchange rates"],
+  try {
+    const dict = await getDictionary(lang)
+
+    return {
+      title: dict.app.name,
+      description: dict.app.slogan,
+      applicationName: dict.app.name,
+      authors: [{ name: "Convertly Team" }],
+      keywords: ["converter", "measurement", "units", "calculator", "currency", "exchange rates"],
+    }
+  } catch (error) {
+    // Fallback metadata
+    return {
+      title: "Convertly",
+      description: "Measure everything, anywhere",
+      applicationName: "Convertly",
+    }
   }
 }
 
@@ -44,10 +57,14 @@ export default function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode
-  params: { lang: Locale }
+  params: { lang: string }
 }>) {
+  // Handle invalid locale
+  const isValidLocale = locales.some((locale) => locale.code === params.lang)
+  const lang = isValidLocale ? params.lang : defaultLocale
+
   return (
-    <html lang={params.lang} suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           {children}

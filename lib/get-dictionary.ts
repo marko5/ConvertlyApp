@@ -1,5 +1,5 @@
 import "server-only"
-import type { Locale } from "./i18n-config"
+import { defaultLocale } from "./i18n-config"
 
 // We enumerate all dictionaries here for better typechecking
 const dictionaries = {
@@ -26,4 +26,17 @@ const dictionaries = {
   el: () => import("@/dictionaries/en.json").then((module) => module.default), // Fallback to English for now
 }
 
-export const getDictionary = async (locale: Locale) => dictionaries[locale]()
+export const getDictionary = async (locale: string) => {
+  // Check if the locale is valid
+  if (!locale || !dictionaries[locale as keyof typeof dictionaries]) {
+    console.warn(`Dictionary not found for locale: ${locale}, falling back to ${defaultLocale}`)
+    return dictionaries[defaultLocale]()
+  }
+
+  try {
+    return await dictionaries[locale as keyof typeof dictionaries]()
+  } catch (error) {
+    console.error(`Error loading dictionary for locale: ${locale}`, error)
+    return dictionaries[defaultLocale]()
+  }
+}

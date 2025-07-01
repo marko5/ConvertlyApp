@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useBreakpoint } from "@/hooks/use-media-query"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
+import { useCurrencyRates } from "@/hooks/use-currency-rates"
 
 // Conversion units for different categories
 const conversionUnits = {
@@ -53,21 +54,10 @@ const conversionUnits = {
     { id: "mo", name: "Months" },
     { id: "yr", name: "Years" },
   ],
-  currency: [
-    { id: "usd", name: "US Dollar (USD)" },
-    { id: "eur", name: "Euro (EUR)" },
-    { id: "gbp", name: "British Pound (GBP)" },
-    { id: "jpy", name: "Japanese Yen (JPY)" },
-    { id: "cad", name: "Canadian Dollar (CAD)" },
-    { id: "aud", name: "Australian Dollar (AUD)" },
-    { id: "cny", name: "Chinese Yuan (CNY)" },
-    { id: "inr", name: "Indian Rupee (INR)" },
-    { id: "chf", name: "Swiss Franc (CHF)" },
-    { id: "sgd", name: "Singapore Dollar (SGD)" },
-  ],
+  currency: [], // Will be populated from the currency service
 }
 
-// Conversion rates for different categories
+// Conversion rates for different categories (excluding currency)
 const conversionRates = {
   length: {
     m: 1,
@@ -110,19 +100,6 @@ const conversionRates = {
     mo: 1 / 2592000,
     yr: 1 / 31536000,
   },
-  currency: {
-    // Updated rates as of May 2025 (projected values)
-    usd: 1,
-    eur: 0.89,
-    gbp: 0.76,
-    jpy: 162.45,
-    cad: 1.42,
-    aud: 1.58,
-    cny: 7.05,
-    inr: 87.65,
-    chf: 0.88,
-    sgd: 1.32,
-  },
 }
 
 // Gradient colors for different categories
@@ -147,30 +124,45 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
   const [toUnit, setToUnit] = useState("")
   const [animate, setAnimate] = useState(false)
   const [copied, setCopied] = useState(false)
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const { isMobile, isTablet, isDesktop } = useBreakpoint()
+
+  // Get live currency rates for currency conversions
+  const { rates: currencyRates, lastUpdated } = useCurrencyRates()
+
+  // Get current units for the selected category
+  const getCurrentUnits = () => {
+    if (category === "currency") {
+      return currencyRates.map((rate) => ({
+        id: rate.code.toLowerCase(),
+        name: `${rate.name} (${rate.code})`,
+      }))
+    }
+    return conversionUnits[category as keyof typeof conversionUnits] || []
+  }
+
+  const currentUnits = getCurrentUnits()
 
   // Set default units when category changes
   useEffect(() => {
-    if (conversionUnits[category as keyof typeof conversionUnits]) {
-      const units = conversionUnits[category as keyof typeof conversionUnits]
-      setFromUnit(units[0].id)
-      setToUnit(units[1].id)
+    if (currentUnits.length > 0) {
+      setFromUnit(currentUnits[0].id)
+      setToUnit(currentUnits[1]?.id || currentUnits[0].id)
       setAnimate(true)
       setTimeout(() => setAnimate(false), 500)
     }
-  }, [category])
+  }, [category, currencyRates.length])
 
   // Convert values when inputs change
   useEffect(() => {
     if (fromValue && !isNaN(Number(fromValue)) && fromUnit && toUnit) {
       const result = convert(Number(fromValue), fromUnit, toUnit, category)
-      setToValue(result.toFixed(4))
+      setToValue(result.toFixed(6))
     } else {
       setToValue("")
     }
-  }, [fromValue, fromUnit, toUnit, category])
+  }, [fromValue, fromUnit, toUnit, category, currencyRates])
 
-  // Keyboard shortcuts for desktop
+  // Keyboard shortcuts for desktop only
   useEffect(() => {
     if (!isDesktop) return
 
@@ -193,6 +185,16 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
 
   // Conversion function
   const convert = (value: number, from: string, to: string, category: string) => {
+    // Special case for currency
+    if (category === "currency") {
+      const fromRate = currencyRates.find((r) => r.code.toLowerCase() === from)?.rate || 1
+      const toRate = currencyRates.find((r) => r.code.toLowerCase() === to)?.rate || 1
+
+      // Convert to USD first, then to target currency
+      const usdValue = value / fromRate
+      return usdValue * toRate
+    }
+
     // Special case for temperature
     if (category === "temperature") {
       // Convert to Celsius first
@@ -229,6 +231,7 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
       category: category,
       from: fromUnit,
       to: toUnit,
+      screen_size: isMobile ? "mobile" : isTablet ? "tablet" : "desktop",
     })
   }
 
@@ -241,8 +244,8 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
       if (dict.units && dict.units[category] && dict.units[category][unitId]) {
         return dict.units[category][unitId]
       }
-      // Fallback to default unit names
-      return conversionUnits[category as keyof typeof conversionUnits]?.find((u) => u.id === unitId)?.name || unitId
+      // Fallback to current unit names
+      return currentUnits.find((u) => u.id === unitId)?.name || unitId
     }
 
     const fromUnitName = getUnitName(fromUnit)
@@ -261,11 +264,9 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
       to_unit: toUnit,
       from_value: fromValue,
       to_value: toValue,
+      screen_size: isMobile ? "mobile" : isTablet ? "tablet" : "desktop",
     })
   }
-
-  // Get current units for the selected category
-  const currentUnits = conversionUnits[category as keyof typeof conversionUnits] || []
 
   // Get gradient for current category
   const gradient = categoryGradients[category as keyof typeof categoryGradients] || "from-emerald-500 to-teal-600"
@@ -278,6 +279,13 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
     return unit.name
   }
 
+  // Get responsive select width
+  const getSelectWidth = () => {
+    if (isMobile) return "w-[120px]"
+    if (isTablet) return "w-[150px]"
+    return "w-[180px]"
+  }
+
   return (
     <Card
       className={cn(
@@ -287,33 +295,40 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
     >
       <CardHeader className={`bg-gradient-to-r ${gradient} text-white`}>
         <div className="flex justify-between items-center">
-          <CardTitle className="text-white">
+          <CardTitle className={`text-white ${isMobile ? "text-lg" : "text-xl"}`}>
             {dict.converter.title} {dict.categories[category]}
           </CardTitle>
-          {category === "currency" && (
-            <div className="flex items-center gap-1 bg-white/20 rounded-full px-2 py-0.5 text-xs">
+          {category === "currency" && lastUpdated && (
+            <div
+              className={`flex items-center gap-1 bg-white/20 rounded-full px-2 py-0.5 ${isMobile ? "text-xs" : "text-sm"}`}
+            >
               <TrendingUp className="h-3 w-3" />
-              <span>{dict.common.updated} May 2025</span>
+              <span>
+                {dict.common.updated} {lastUpdated.toLocaleTimeString()}
+              </span>
             </div>
           )}
         </div>
       </CardHeader>
 
-      <CardContent className="p-4 space-y-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950/50 dark:to-background">
+      <CardContent
+        className={`space-y-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-950/50 dark:to-background ${isMobile ? "p-4" : "p-6"}`}
+      >
         <div className="space-y-4">
           {/* From unit */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">{dict.common.from}</label>
-            <div className="flex gap-2">
+            <label className={`font-medium ${isMobile ? "text-sm" : "text-base"}`}>{dict.common.from}</label>
+            <div className={`flex gap-2 ${isMobile ? "flex-col" : "flex-row"}`}>
               <Input
                 type="number"
                 value={fromValue}
                 onChange={(e) => setFromValue(e.target.value)}
-                className="flex-1 bg-white/80 dark:bg-background/80 border-muted"
+                className={`bg-white/80 dark:bg-background/80 border-muted ${isMobile ? "w-full" : "flex-1"}`}
+                placeholder="Enter value"
               />
               <Select value={fromUnit} onValueChange={setFromUnit}>
                 <SelectTrigger
-                  className={`${isDesktop ? "w-[180px]" : "w-[140px]"} bg-white/80 dark:bg-background/80 border-muted`}
+                  className={`${isMobile ? "w-full" : getSelectWidth()} bg-white/80 dark:bg-background/80 border-muted`}
                 >
                   <SelectValue placeholder="Unit" />
                 </SelectTrigger>
@@ -337,9 +352,9 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
                     variant="outline"
                     size="icon"
                     onClick={handleSwap}
-                    className="rounded-full h-10 w-10 bg-white dark:bg-gray-900 shadow-sm hover:shadow"
+                    className={`rounded-full bg-white dark:bg-gray-900 shadow-sm hover:shadow active:scale-95 ${isMobile ? "h-12 w-12" : "h-10 w-10"}`}
                   >
-                    <ArrowDownUp className="h-4 w-4" />
+                    <ArrowDownUp className={isMobile ? "h-5 w-5" : "h-4 w-4"} />
                     <span className="sr-only">{dict.common.swap}</span>
                   </Button>
                 </TooltipTrigger>
@@ -354,14 +369,15 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
 
           {/* To unit */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">{dict.common.to}</label>
-            <div className="flex gap-2">
-              <div className="relative flex-1">
+            <label className={`font-medium ${isMobile ? "text-sm" : "text-base"}`}>{dict.common.to}</label>
+            <div className={`flex gap-2 ${isMobile ? "flex-col" : "flex-row"}`}>
+              <div className={`relative ${isMobile ? "w-full" : "flex-1"}`}>
                 <Input
                   type="text"
                   value={toValue}
                   readOnly
-                  className="flex-1 pr-10 bg-white/80 dark:bg-background/80 border-muted font-mono"
+                  className={`pr-10 bg-white/80 dark:bg-background/80 border-muted font-mono ${isMobile ? "w-full" : "flex-1"}`}
+                  placeholder="Result"
                 />
                 <TooltipProvider>
                   <Tooltip>
@@ -369,7 +385,7 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="absolute right-0 top-0 h-full w-10 px-3 text-muted-foreground hover:text-foreground"
+                        className={`absolute right-0 top-0 h-full px-3 text-muted-foreground hover:text-foreground ${isMobile ? "w-12" : "w-10"}`}
                         onClick={copyToClipboard}
                       >
                         {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -384,7 +400,7 @@ export default function ConversionPanel({ category, dict }: ConversionPanelProps
               </div>
               <Select value={toUnit} onValueChange={setToUnit}>
                 <SelectTrigger
-                  className={`${isDesktop ? "w-[180px]" : "w-[140px]"} bg-white/80 dark:bg-background/80 border-muted`}
+                  className={`${isMobile ? "w-full" : getSelectWidth()} bg-white/80 dark:bg-background/80 border-muted`}
                 >
                   <SelectValue placeholder="Unit" />
                 </SelectTrigger>

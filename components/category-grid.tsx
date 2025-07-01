@@ -1,7 +1,7 @@
 "use client"
 import { Ruler, Weight, Thermometer, Droplet, Clock, DollarSign } from "lucide-react"
 import { cn } from "@/lib/utils"
-import { useMediaQuery } from "@/hooks/use-media-query"
+import { useBreakpoint } from "@/hooks/use-media-query"
 
 export const categories = [
   { id: "length", name: "Length", icon: Ruler, gradient: "from-blue-500 to-cyan-500" },
@@ -19,12 +19,17 @@ interface CategoryGridProps {
 }
 
 export default function CategoryGrid({ selectedCategory, onSelectCategory, dict }: CategoryGridProps) {
-  const isDesktop = useMediaQuery("(min-width: 768px)")
+  const { isMobile, isTablet, isDesktop } = useBreakpoint()
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-medium">{dict.categories.title}</h2>
-      <div className={isDesktop ? "grid grid-cols-1 gap-3" : "grid grid-cols-3 gap-3"}>
+      <h2 className={`font-medium ${isMobile ? "text-base" : "text-lg"}`}>{dict.categories.title}</h2>
+      <div
+        className={cn("grid gap-3", {
+          "grid-cols-2": isMobile,
+          "grid-cols-1": isTablet || isDesktop,
+        })}
+      >
         {categories.map((category) => {
           const Icon = category.icon
           const isSelected = selectedCategory === category.id
@@ -34,10 +39,15 @@ export default function CategoryGrid({ selectedCategory, onSelectCategory, dict 
               key={category.id}
               className={cn(
                 "rounded-lg flex items-center justify-center gap-2 transition-all duration-200",
-                "border shadow-sm hover:shadow-md",
-                isDesktop ? "h-14 flex-row justify-start px-4" : "h-24 flex-col",
+                "border shadow-sm hover:shadow-md active:scale-95",
+                {
+                  // Mobile layout
+                  "h-20 flex-col p-3": isMobile,
+                  // Tablet/Desktop layout
+                  "h-14 flex-row justify-start px-4": !isMobile,
+                },
                 isSelected
-                  ? `bg-gradient-to-br ${category.gradient} text-white border-transparent`
+                  ? `bg-gradient-to-br ${category.gradient} text-white border-transparent shadow-lg`
                   : "bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-border",
               )}
               onClick={() => onSelectCategory(category.id)}
@@ -45,7 +55,9 @@ export default function CategoryGrid({ selectedCategory, onSelectCategory, dict 
               <div className={cn("rounded-full p-2", isSelected ? "bg-white/20" : "bg-primary/10")}>
                 <Icon className={cn("h-5 w-5", isSelected ? "text-white" : "text-primary")} />
               </div>
-              <span className="text-sm font-medium">{dict.categories[category.id]}</span>
+              <span className={cn("font-medium", isMobile ? "text-xs" : "text-sm")}>
+                {dict.categories[category.id]}
+              </span>
             </button>
           )
         })}

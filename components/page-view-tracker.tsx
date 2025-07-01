@@ -1,13 +1,20 @@
 "use client"
 
 import { usePathname, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export function PageViewTracker() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
     try {
       // Track page views when the route changes
       const url = pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : "")
@@ -23,7 +30,7 @@ export function PageViewTracker() {
       // Silently handle any errors
       console.error("Page tracking error:", error)
     }
-  }, [pathname, searchParams])
+  }, [pathname, searchParams, mounted])
 
   return null
 }

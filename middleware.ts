@@ -5,6 +5,16 @@ import { locales, defaultLocale } from "@/lib/i18n-config"
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
+  // Handle root path
+  if (pathname === "/") {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
+  }
+
+  // Special case: redirect /[lang] to /en
+  if (pathname === "/[lang]") {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
+  }
+
   // Check if there is any supported locale in the pathname
   const pathnameIsMissingLocale = locales.every(
     (locale) => !pathname.startsWith(`/${locale.code}/`) && pathname !== `/${locale.code}`,
@@ -21,5 +31,5 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|manifest.json|sw.js).*)"],
 }

@@ -8,10 +8,10 @@ type EventOptions = {
 }
 
 export const trackEvent = (eventName: string, options: EventOptions = {}) => {
-  try {
-    // Check if we're in the browser and analytics is available
-    if (typeof window === "undefined") return
+  // Only run on client side
+  if (typeof window === "undefined") return
 
+  try {
     // Use a timeout to ensure the analytics script has loaded
     setTimeout(() => {
       if (window.va && typeof window.va === "function") {
