@@ -6,6 +6,7 @@ import { ModeToggle } from "@/components/mode-toggle"
 import CategoryGrid from "@/components/category-grid"
 import ConversionPanel from "@/components/conversion-panel"
 import CurrencyRatesTable from "@/components/currency-rates-table"
+import CryptoRatesTable from "@/components/crypto-rates-table" // Import the new component
 import SplashScreen from "@/components/splash-screen"
 import AppLogo from "@/components/app-logo"
 import LanguageSelector from "@/components/language-selector"
@@ -15,7 +16,7 @@ import { Info } from "lucide-react"
 import type { Locale } from "@/lib/i18n-config"
 import { trackEvent, AnalyticsEvents } from "@/lib/analytics"
 
-export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) {
+export default function ClientPage({ lang, dict, initialCryptoRates }: { lang: Locale; dict: any; initialCryptoRates: any[] }) {
   const [selectedCategory, setSelectedCategory] = useState("length")
   const [activeTab, setActiveTab] = useState("converter")
   const [showSplash, setShowSplash] = useState(true)
@@ -108,7 +109,7 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
           {/* Tab Navigation - Responsive */}
-          <TabsList className={`grid w-full grid-cols-2 mb-6 ${isMobile ? "h-10" : "h-12"}`}>
+          <TabsList className={`grid w-full grid-cols-3 mb-6 ${isMobile ? "h-10" : "h-12"}`}>
             <TabsTrigger
               value="converter"
               className={`data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-900/20 dark:data-[state=active]:text-emerald-400 ${
@@ -124,6 +125,14 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
               }`}
             >
               {dict.tabs.currencyRates}
+            </TabsTrigger>
+            <TabsTrigger
+              value="crypto"
+              className={`data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-700 dark:data-[state=active]:bg-emerald-900/20 dark:data-[state=active]:text-emerald-400 ${
+                isMobile ? "text-sm" : "text-base"
+              }`}
+            >
+              {dict.tabs.crypto}
             </TabsTrigger>
           </TabsList>
 
@@ -146,6 +155,11 @@ export default function ClientPage({ lang, dict }: { lang: Locale; dict: any }) 
           {/* Currency Rates Tab */}
           <TabsContent value="currency-rates">
             <CurrencyRatesTable dict={dict} />
+          </TabsContent>
+
+          {/* Crypto Tab */}
+          <TabsContent value="crypto">
+            <CryptoRatesTable initialCryptoRates={initialCryptoRates} />
           </TabsContent>
         </Tabs>
 

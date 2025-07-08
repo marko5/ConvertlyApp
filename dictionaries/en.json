@@ -20,7 +20,8 @@
   },
   "tabs": {
     "converter": "Converter",
-    "currencyRates": "Currency Rates"
+    "currencyRates": "Currency Rates",
+    "crypto": "Crypto"
   },
   "categories": {
     "title": "Categories",
