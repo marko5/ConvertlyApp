@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
+import Image from 'next/image'; // Import Next.js Image component
 
 interface CryptoRate {
   id: string;
@@ -9,6 +10,7 @@ interface CryptoRate {
   symbol: string;
   priceUsd: string;
   changePercent24Hr: string;
+  imageUrl: string; // Added imageUrl
 }
 
 interface CryptoRatesTableProps {
@@ -54,7 +56,18 @@ const CryptoRatesTable: React.FC<CryptoRatesTableProps> = ({ initialCryptoRates 
           <TableBody>
             {cryptoRates.map((rate) => (
               <TableRow key={rate.id}>
-                <TableCell>{rate.name}</TableCell>
+                <TableCell className="flex items-center">
+                  {rate.imageUrl && (
+                    <Image
+                      src={rate.imageUrl}
+                      alt={`${rate.name} icon`}
+                      width={20}
+                      height={20}
+                      className="mr-2 rounded-full"
+                    />
+                  )}
+                  {rate.name}
+                </TableCell>
                 <TableCell>{rate.symbol}</TableCell>
                 <TableCell>${parseFloat(rate.priceUsd).toFixed(2)}</TableCell>
                 <TableCell

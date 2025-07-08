@@ -6,8 +6,8 @@ import { redirect } from "next/navigation"
 
 async function getInitialCryptoRates() {
   try {
-    // Using CoinGecko API for top 10 cryptocurrencies (free tier limits requests)
-    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false', {
+    // Using CoinGecko API for top 50 cryptocurrencies (adjust per_page as needed)
+    const res = await fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=50&page=1&sparkline=false', {
       next: { revalidate: 86400 } // Revalidate every 24 hours (86400 seconds)
     });
     if (!res.ok) {
@@ -20,6 +20,7 @@ async function getInitialCryptoRates() {
       symbol: coin.symbol.toUpperCase(),
       priceUsd: coin.current_price.toString(),
       changePercent24Hr: coin.price_change_percentage_24h.toString(),
+      imageUrl: coin.image, // Add image URL
     }));
   } catch (error) {
     console.error("Error fetching initial crypto rates:", error);
