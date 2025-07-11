@@ -5,6 +5,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Script from "next/script"
 import { APP_CONFIG, APP_URL, PWA_CONFIG } from "@/lib/domain-config"
+import { ADMOB_APP_ID } from "@/lib/ad-constants"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -103,6 +104,9 @@ export default function RootLayout({
 
         {/* Canonical URL */}
         <link rel="canonical" href={APP_URL} />
+        {/* Google AdSense */}
+        <script async src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADMOB_APP_ID}`}
+          crossOrigin="anonymous"></script>
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>

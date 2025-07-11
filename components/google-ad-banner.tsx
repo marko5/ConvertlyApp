@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { ADMOB_APP_ID } from "@/lib/ad-constants"
 
 interface GoogleAdBannerProps {
   className?: string
@@ -66,7 +67,7 @@ export default function GoogleAdBanner({
         <ins
           className="adsbygoogle"
           style={{ display: "block", width: "100%", height: "100px" }}
-          data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+          data-ad-client={ADMOB_APP_ID}
           data-ad-slot={slot}
           data-ad-format={format}
           data-full-width-responsive={responsive ? "true" : "false"}
