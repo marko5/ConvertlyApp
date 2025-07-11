@@ -1,4 +1,5 @@
-const CACHE_NAME = "convertly-v1"
+const STATIC_CACHE_NAME = "convertly-static-v2"
+const DATA_CACHE_NAME = "convertly-data-v1"
 const urlsToCache = [
   "/",
   "/index.html",
@@ -8,45 +9,37 @@ const urlsToCache = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
+    caches.open(STATIC_CACHE_NAME).then((cache) => {
       return cache.addAll(urlsToCache)
     }),
   )
 })
 
 self.addEventListener("fetch", (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => {
-      // Return cached response if found
-      if (response) {
-        return response
-      }
-
-      // Clone the request
-      const fetchRequest = event.request.clone()
-
-      // Make network request and cache the response
-      return fetch(fetchRequest).then((response) => {
-        // Check if valid response
-        if (!response || response.status !== 200 || response.type !== "basic") {
-          return response
-        }
-
-        // Clone the response
-        const responseToCache = response.clone()
-
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache)
-        })
-
-        return response
-      })
-    }),
-  )
+  if (event.request.url.includes("/api/")) {
+    event.respondWith(
+      caches.open(DATA_CACHE_NAME).then((cache) => {
+        return fetch(event.request)
+          .then((response) => {
+            cache.put(event.request.url, response.clone())
+            return response
+          })
+          .catch(() => {
+            return caches.match(event.request)
+          })
+      }),
+    )
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((response) => {
+        return response || fetch(event.request)
+      }),
+    )
+  }
 })
 
 self.addEventListener("activate", (event) => {
-  const cacheWhitelist = [CACHE_NAME]
+  const cacheWhitelist = [STATIC_CACHE_NAME, DATA_CACHE_NAME]
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(

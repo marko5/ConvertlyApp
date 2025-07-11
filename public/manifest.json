@@ -7,6 +7,10 @@
   "theme_color": "#000000",
   "description": "A currency and crypto converter application.",
   "id": "/",
+  "serviceworker": {
+    "src": "/sw.js",
+    "scope": "/"
+  },
   "launch_handler": {
     "client_mode": "navigate-existing"
   },
