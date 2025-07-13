@@ -16,7 +16,7 @@ export function ResponsiveLayout({ children, className }: ResponsiveLayoutProps)
   return (
     <div
       className={cn(
-        "w-full mx-auto transition-all duration-300",
+        "w-full mx-auto transition-all duration-300 min-h-screen py-8", // Added min-h-screen and py-8
         {
           "max-w-sm px-4": isMobile,
           "max-w-2xl px-6": isTablet,

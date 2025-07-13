@@ -5,6 +5,11 @@ import { locales, defaultLocale } from "@/lib/i18n-config"
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
+  // This ensures Vercel's internal paths are not processed by locale logic.
+  if (pathname.startsWith("/_vercel")) {
+    return NextResponse.next()
+  }
+
   // Handle root path
   if (pathname === "/") {
     return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
