@@ -1,22 +1,25 @@
 import type { CapacitorConfig } from "@capacitor/cli"
-import { APP_URL } from "./lib/domain-config"
 
 const config: CapacitorConfig = {
-  appId: "com.yourname.convertly",
-  appName: "Convertly",
-  webDir: "out", // This is crucial for Next.js static export
+  appId: "com.convertly.app", // Your unique application ID
+  appName: "ConvertlyApp",
+  webDir: "out", // Next.js static export output directory
   bundledWebRuntime: false,
   plugins: {
-    // Remove AdMob configuration
-    CapacitorHttp: {
-      enabled: true,
+    SplashScreen: {
+      launchShowDuration: 3000,
+      launchAutoHide: true,
+      backgroundColor: "#ffffffff",
+      androidSplashResourceName: "splash",
+      androidScaleType: "CENTER_CROP",
+      showSpinner: true,
+      androidSpinnerStyle: "large",
+      iosSpinnerStyle: "small",
+      spinnerColor: "#999999",
+      splashFullScreen: true,
+      splashImmersive: true,
+      layoutName: "launch_screen",
     },
-  },
-  server: {
-    androidScheme: "https",
-    hostname: APP_URL.replace("https://", ""),
-    iosScheme: "https",
-    allowNavigation: [APP_URL],
   },
 }
 

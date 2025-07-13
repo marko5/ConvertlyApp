@@ -1,89 +1,100 @@
-# Building and Exporting Convertly to Android Studio
+# Building and Exporting ConvertlyApp to Android Studio
 
-This guide will walk you through the steps to build your Convertly web application, bundle it with Capacitor, and open the resulting Android project in Android Studio.
+This guide will walk you through the steps to build your Next.js web application, bundle it with Capacitor, and open it in Android Studio to create a native Android app.
 
 ## Prerequisites
 
-1.  **Node.js and npm/bun**: Ensure you have Node.js (LTS recommended) and a package manager (npm, yarn, or bun) installed.
-2.  **Android Studio**: Download and install Android Studio. Make sure you have the necessary Android SDKs and build tools installed.
-3.  **Java Development Kit (JDK)**: Ensure you have a compatible JDK installed (e.g., OpenJDK 17 or later).
+1.  **Node.js / Bun**: Ensure you have Node.js (LTS version) or Bun installed.
+2.  **Android Studio**: Download and install Android Studio from the official website.
+3.  **Android SDK**: Make sure you have the necessary Android SDKs installed via Android Studio's SDK Manager (API Level 34 recommended).
+4.  **Java Development Kit (JDK)**: Android Studio typically bundles a JDK, but ensure you have JDK 17 or newer installed and configured.
 
-## Steps
+## Step-by-Step Guide
 
 ### 1. Install Dependencies
 
-Ensure all your project dependencies are installed.
+First, ensure all your project's dependencies are installed.
+
 \`\`\`bash
 bun install
-# or npm install
-# or yarn install
 \`\`\`
 
-### 2. Build the Next.js Web Application
-
-First, build your Next.js application for static export. This will create an `out` directory containing the static HTML, CSS, and JavaScript files.
-
-\`\`\`bash
-bun run build
-# or npm run build
-# or yarn build
-\`\`\`
-
-### 3. Add Android Platform (if not already added)
+### 2. Add Android Platform (if not already added)
 
 If you haven't added the Android platform to your Capacitor project yet, run this command:
 
 \`\`\`bash
 bun run capacitor:add:android
-# or npm run capacitor:add:android
-# or yarn capacitor:add:android
+# This will create the 'android' directory in your project root.
 \`\`\`
-This will create the `android` directory in your project root, along with the necessary `gradle` files.
 
-### 4. Sync Web Assets to Android Project
+### 3. Build the Web Application and Sync with Capacitor
 
-After building your web app, you need to sync these assets into the Capacitor Android project. This command copies your `out` directory content into the `android/app/src/main/assets/public` folder.
+This command will:
+*   Build your Next.js application for static export (`next build`). The output will be in the `out/` directory.
+*   Copy the built web assets into the Capacitor Android project (`npx cap sync android`).
+*   Update Capacitor's native dependencies.
 
 \`\`\`bash
-bun run capacitor:sync:android
-# or npm run capacitor:sync:android
-# or yarn capacitor:sync:android
+bun run build:android
 \`\`\`
 
-### 5. Open in Android Studio
+### 4. Open the Android Project in Android Studio
 
-Now, you can open the generated Android project in Android Studio.
+Once the sync is complete, you can open the Android project in Android Studio:
 
 \`\`\`bash
 bun run capacitor:open:android
-# or npm run capacitor:open:android
-# or yarn capacitor:open:android
 \`\`\`
 
-Android Studio will open, and it might take some time to sync Gradle files and download any missing dependencies.
+Android Studio will open, and it might take some time to sync Gradle files and download dependencies for the first time.
 
-### 6. Build and Run from Android Studio
+### 5. Run Your App in Android Studio
 
-Once Android Studio is ready:
+1.  **Select a Device**: In Android Studio, select an AVD (Android Virtual Device) from the device dropdown menu or connect a physical Android device.
+2.  **Run**: Click the green "Run" button (looks like a play icon) in the toolbar.
 
-1.  **Select a Device/Emulator**: In Android Studio, select a virtual device or connect a physical Android device.
-2.  **Run the App**: Click the "Run" button (green play icon) in the toolbar.
+Your web application should now launch as a native Android app on your selected device or emulator.
 
-This will build and install the Android application on your selected device/emulator.
+### 6. Important Android Studio Configurations (for Release Builds)
 
-### Useful Commands (from `package.json`)
+#### a. Set up AdMob (if applicable)
 
-*   `bun run build`: Builds the Next.js web app for static export.
-*   `bun run capacitor:add:android`: Adds the Android platform to Capacitor.
-*   `bun run capacitor:sync:android`: Syncs web assets to the Android project.
-*   `bun run capacitor:open:android`: Opens the Android project in Android Studio.
-*   `bun run build:android`: A convenience script that runs `bun run build` followed by `bun run capacitor:sync:android`.
+If you plan to use AdMob, you need to:
+*   **Replace Placeholder AdMob App ID**: In `android/app/src/main/AndroidManifest.xml`, locate the `com.google.android.gms.ads.APPLICATION_ID` meta-data tag and replace `ca-app-pub-xxxxxxxxxxxxxxxx~yyyyyyyyyy` with your actual AdMob App ID.
+*   **Add Google Services JSON**: If you're using Firebase services (which AdMob often integrates with), place your `google-services.json` file in the `android/app/` directory.
 
-### Important Notes for Android Studio
+#### b. Configure Signing for Release
 
-*   **Gradle Sync**: If you encounter issues, try "Sync Project with Gradle Files" from the File menu in Android Studio.
-*   **Signing**: For release builds, you will need to configure app signing in Android Studio.
-*   **AdMob**: If you plan to use AdMob, ensure your `google-services.json` file is placed in `android/app/` and your AdMob App ID is correctly configured in `AndroidManifest.xml` and `strings.xml`.
-*   **Network Security**: If your app makes HTTP requests to non-HTTPS domains or specific custom domains, you might need to configure `network_security_config.xml` in `android/app/src/main/res/xml/`.
+For release builds (e.g., for Google Play Store), you need to sign your app.
+1.  In Android Studio, go to `Build > Generate Signed Bundle / APK...`.
+2.  Choose "Android App Bundle" or "APK".
+3.  Create a new keystore or use an existing one. **Keep your keystore file and password secure!**
+4.  Follow the prompts to generate the signed bundle/APK.
 
-By following these steps, you should be able to successfully build and run your Convertly web app as an Android application.
+#### c. Update App Icon and Splash Screen
+
+*   **App Icon**: Replace the default icons in `android/app/src/main/res/mipmap-*` directories with your app's actual icons.
+*   **Splash Screen**: If you have a custom splash screen image, ensure it's correctly placed in `android/app/src/main/res/drawable/splash.png` (or similar, as configured in `capacitor.config.ts`).
+
+#### d. Network Security Configuration
+
+Your `AndroidManifest.xml` already includes `android:usesCleartextTraffic="true"` and references `network_security_config.xml`. Ensure `android/app/src/main/res/xml/network_security_config.xml` exists and is configured to allow necessary network traffic (especially for APIs like CoinGecko).
+
+\`\`\`xml
+<!-- android/app/src/main/res/xml/network_security_config.xml -->
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">localhost</domain>
+        <!-- Add any other domains that might use HTTP (not HTTPS) in development -->
+    </domain-config>
+</network-security-config>
+\`\`\`
+
+This comprehensive setup should get your ConvertlyApp ready for Android Studio and building a native Android application!
