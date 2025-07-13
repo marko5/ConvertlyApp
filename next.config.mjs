@@ -11,6 +11,7 @@ const nextConfig = {
     domains: ['yourdomain.com'], // Replace with your domain
     unoptimized: true,
   },
+  output: 'export', // Enable static HTML export for Capacitor
   async headers() {
     return [
       {

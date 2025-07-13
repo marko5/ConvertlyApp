@@ -4,7 +4,7 @@ import { APP_URL } from "./lib/domain-config"
 const config: CapacitorConfig = {
   appId: "com.yourname.convertly",
   appName: "Convertly",
-  webDir: "out",
+  webDir: "out", // This is crucial for Next.js static export
   bundledWebRuntime: false,
   plugins: {
     // Remove AdMob configuration
